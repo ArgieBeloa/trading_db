@@ -22,14 +22,12 @@ public class AuthController {
             @RequestBody LoginRequest request
     ) {
 
-        String token = authService.login(
+        AuthResponse response = authService.login(
                 request.getEmail(),
                 request.getPassword()
         );
 
-        return ResponseEntity.ok(
-                new AuthResponse(token)
-        );
+        return ResponseEntity.ok(response);
     }
 
     public static class LoginRequest {
@@ -59,19 +57,20 @@ public class AuthController {
 
     public static class AuthResponse {
 
+        private Long id;
         private String token;
-        private String email;
 
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public AuthResponse(String token) {
+        public AuthResponse(Long id, String token) {
+            this.id = id;
             this.token = token;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
         }
 
         public String getToken() {

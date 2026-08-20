@@ -21,11 +21,13 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String login(String email, String password) {
+    public AuthController.AuthResponse login(String email, String password) {
 
         UsersModel user = usersRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("Invalid email or password")
+                        new RuntimeException(
+                                "Invalid email or password"
+                        )
                 );
 
         if (!passwordEncoder.matches(
@@ -37,6 +39,11 @@ public class AuthService {
             );
         }
 
-        return jwtService.generateToken(user.getEmail(), user.getRole());
+        String token = jwtService.generateToken(user.getEmail(), user.getRole());
+
+        return new AuthController.AuthResponse(
+                user.getId(),
+                token
+        );
     }
 }
