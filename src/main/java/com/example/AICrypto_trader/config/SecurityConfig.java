@@ -35,7 +35,7 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
 
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins("http://localhost:8081")
                         .allowedMethods(
                                 "GET",
                                 "POST",
@@ -60,11 +60,14 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public registration
+                        // Public registration/login
                         .requestMatchers(
                                 "/api/users",
                                 "/api/auth/**"
                         ).permitAll()
+
+                        // WebSocket endpoint
+                        .requestMatchers("/ws/**").permitAll()
 
                         // Everything else requires JWT
                         .anyRequest().authenticated()
